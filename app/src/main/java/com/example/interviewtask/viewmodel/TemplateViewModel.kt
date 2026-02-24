@@ -1,4 +1,4 @@
-package com.example.interviewtask
+package com.example.interviewtask.viewmodel
 
 import android.app.Application
 import androidx.compose.runtime.getValue
@@ -9,6 +9,7 @@ import com.example.interviewtask.bottomnavigation.loadJsonFromAssets
 import com.example.interviewtask.data.remote.TemplatesResponse
 class TemplateViewModel(application: Application): AndroidViewModel(application
 ){
+
 
     //holds observes changes
     var templates by mutableStateOf<TemplatesResponse?>(null)

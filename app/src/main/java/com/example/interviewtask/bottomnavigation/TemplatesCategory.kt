@@ -2,13 +2,13 @@ package com.example.interviewtask.bottomnavigation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
+
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
@@ -25,11 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.interviewtask.TemplateViewModel
 import com.example.interviewtask.data.remote.TemplateItems
+import com.example.interviewtask.viewmodel.TemplateViewModel
 
 @Composable
-fun TemplatesCategoryScreen(viewModel: TemplateViewModel,navController: NavController){
+fun TemplatesCategoryScreen(viewModel: TemplateViewModel, navController: NavController){
     val data = viewModel.templates
     val selectedCategory = viewModel.selectedCategory
 
@@ -45,6 +45,7 @@ fun TemplatesCategoryScreen(viewModel: TemplateViewModel,navController: NavContr
         val selectedTemplate = data[selectedCategory]?.templates ?: emptyList()
 
         CategoryButtons(category,selectedCategory) {viewModel.onCategorySelected(it) }
+
         SelectedCategoryContent(selectedTemplate,navController)
 
     }
@@ -67,6 +68,7 @@ fun CategoryButtons(categories: List<String>,
             Button(onClick = {onCategoryClick(category) }, colors = ButtonDefaults.buttonColors(
                 containerColor = if (isSelected) Color.Black else Color.LightGray,
                 contentColor = if (isSelected) Color.White else Color.Black
+
             ), modifier = Modifier.padding(start = 4.dp)) {
                 Text(category, fontSize = 13.sp)
             }
@@ -80,6 +82,10 @@ fun SelectedCategoryContent(templates: List<TemplateItems>,navController: NavCon
 
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
 
+
+
+
+
         items(templates){ item ->
 
             Card(modifier = Modifier.padding(8.dp).wrapContentHeight().wrapContentWidth(),
@@ -89,7 +95,10 @@ fun SelectedCategoryContent(templates: List<TemplateItems>,navController: NavCon
                 AsyncImage(item.url, contentDescription = "templates")
             }
 
+
+
         }
     }
+
 
 }

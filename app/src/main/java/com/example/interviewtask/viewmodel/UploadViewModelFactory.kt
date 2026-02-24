@@ -1,6 +1,4 @@
-package com.example.interviewtask
-
-import android.app.Application
+package com.example.interviewtask.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.interviewtask.data.repository.UploadRepository

@@ -1,4 +1,4 @@
-package com.example.interviewtask
+package com.example.interviewtask.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.interviewtask.data.offline.GenratedImageDao
 import com.example.interviewtask.data.offline.GenratedImageEntity
 import com.example.interviewtask.data.repository.UploadRepository
 import com.example.interviewtask.presentation.uploadToResultScreens.UploadUiState
@@ -24,7 +23,7 @@ class UploadViewmodel (private val repository: UploadRepository): ViewModel(){
     var state by mutableStateOf<UploadUiState>(UploadUiState.Idle)
         private set
 
-    val saveState by mutableStateOf("")
+   // val saveState by mutableStateOf("")
     var lastReqId by mutableStateOf<String?>(null)
     var lastImageUrl by mutableStateOf<String?>(null)
 
@@ -35,7 +34,9 @@ class UploadViewmodel (private val repository: UploadRepository): ViewModel(){
         initialValue = emptyList()
     )
     fun uploadImage(
-        part: MultipartBody.Part
+        part: MultipartBody.Part,
+        folderName : String,
+        fileName:String
     ) {
 
         viewModelScope.launch {
@@ -44,7 +45,9 @@ class UploadViewmodel (private val repository: UploadRepository): ViewModel(){
 
             try {
 
-                val uploadResponse =  repository.uploadAndGetResult(folder = "modelingWomen",fileName = "modelingWomen_4.jpg" , appName = "NaturePhotoFramesandEditor", imagePart = part)
+
+
+                val uploadResponse =  repository.uploadAndGetResult(folder = folderName,fileName = fileName , appName = "NaturePhotoFramesandEditor", imagePart = part)
 
                 if (uploadResponse.isSuccessful) {
                     Log.d("UPLOAD", "Success: ${uploadResponse.body()}")

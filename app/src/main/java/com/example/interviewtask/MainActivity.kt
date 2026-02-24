@@ -1,6 +1,5 @@
 package com.example.interviewtask
 
-import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,8 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.interviewtask.bottomnavigation.MainScreen
 import com.example.interviewtask.data.remote.RetrofitInstance
 import com.example.interviewtask.data.offline.GenImageDataBaseProvider
-import com.example.interviewtask.data.offline.GenratedImageDataBase
 import com.example.interviewtask.data.repository.UploadRepository
+import com.example.interviewtask.viewmodel.TemplateViewModel
+import com.example.interviewtask.viewmodel.UploadViewModelFactory
+import com.example.interviewtask.viewmodel.UploadViewmodel
 import kotlin.getValue
 
 class MainActivity : ComponentActivity() {

@@ -4,7 +4,6 @@ import com.example.interviewtask.data.UploadResponse
 import com.example.interviewtask.data.offline.GenratedImageDao
 import com.example.interviewtask.data.offline.GenratedImageEntity
 import com.example.interviewtask.data.remote.UploadAPi
-import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response

@@ -2,6 +2,7 @@ package com.example.interviewtask.presentation.uploadToResultScreens
 
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
@@ -25,12 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.interviewtask.UploadViewmodel
+import com.example.interviewtask.viewmodel.UploadViewmodel
 import com.example.interviewtask.bottomnavigation.Screens
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import androidx.core.net.toUri
 
 @Composable
 fun ImageSelection (uri: String?, navController: NavController,viewmodel: UploadViewmodel){
@@ -41,6 +43,7 @@ fun ImageSelection (uri: String?, navController: NavController,viewmodel: Upload
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
 
+
     val imagePickerLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
@@ -48,8 +51,15 @@ fun ImageSelection (uri: String?, navController: NavController,viewmodel: Upload
             selectedImageUri = uri
         }
 
+
+
+
+
+
     Column(modifier = Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally)
     {
+
+
 
         Text("Image Selection", fontSize = 18.sp, fontWeight = FontWeight.Bold)
 
@@ -64,6 +74,9 @@ fun ImageSelection (uri: String?, navController: NavController,viewmodel: Upload
         }
 
 
+
+
+
         //showing selected image from gallery
         selectedImageUri.let { uri ->
             Card(modifier = Modifier.padding(top = 10.dp).wrapContentWidth().height(430.dp)) {
@@ -73,17 +86,27 @@ fun ImageSelection (uri: String?, navController: NavController,viewmodel: Upload
             }
         }
 
+        //for folder and filename
+
+        val tempUri = uri?.toUri()
+        val fileName = tempUri?.lastPathSegment ?: " "
+        val folderName = tempUri?.pathSegments?.getOrNull(tempUri.pathSegments.size - 2) ?:" "
+
+
         //button for upload selected image
         val isLoading = viewmodel.state is UploadUiState.Loading
 
             Button(enabled = selectedImageUri != null && !isLoading, onClick = {
+
                 selectedImageUri?.let { uri->
 
                     val file = uriToFile(context,uri)
 
                     val filePart = prepareFilePart(file)
 
-                    viewmodel.uploadImage(part = filePart)
+                    viewmodel.uploadImage(part = filePart, folderName,fileName)
+
+                    Toast.makeText(context,"Image Uploaded", Toast.LENGTH_SHORT).show()
 
                     navController.navigate(Screens.Processing.route)
 
@@ -106,8 +129,13 @@ fun ImageSelection (uri: String?, navController: NavController,viewmodel: Upload
 //uri to file
 fun uriToFile(context: Context, uri: Uri): File{
 
-    val file = File(context.cacheDir,"upload_image.jpg")
+
+    val fileName = "upload_${System.currentTimeMillis()}.jpg"
+
     val inputStream = context.contentResolver.openInputStream(uri)?:throw IllegalArgumentException("cannot open url")
+
+    val file = File(context.cacheDir,fileName)
+
     file.outputStream().use { outputStream ->
         inputStream.use { inputStream ->
             inputStream.copyTo(outputStream)
