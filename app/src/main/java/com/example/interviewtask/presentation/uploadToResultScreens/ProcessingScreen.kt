@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.interviewtask.UploadViewmodel
+import com.example.interviewtask.viewmodel.UploadViewmodel
 import com.example.interviewtask.bottomnavigation.Screens
 
 @Composable

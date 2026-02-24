@@ -13,8 +13,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.interviewtask.presentation.uploadToResultScreens.ImageSelection
 import com.example.interviewtask.presentation.uploadToResultScreens.settingScreens.SettingsScreen
-import com.example.interviewtask.TemplateViewModel
-import com.example.interviewtask.UploadViewmodel
+import com.example.interviewtask.viewmodel.TemplateViewModel
+import com.example.interviewtask.viewmodel. UploadViewmodel
 import com.example.interviewtask.presentation.uploadToResultScreens.ProcessingScreen
 import com.example.interviewtask.presentation.uploadToResultScreens.ResultScreen
 
