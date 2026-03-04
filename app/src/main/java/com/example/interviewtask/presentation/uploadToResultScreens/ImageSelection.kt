@@ -116,15 +116,8 @@ fun ImageSelection (uri: String?, navController: NavController,viewmodel: Upload
                 Text("Upload Image", fontSize = 12.sp)
             }
 
-
-
-
-
-
-
     }
 }
-
 
 //uri to file
 fun uriToFile(context: Context, uri: Uri): File{
@@ -143,6 +136,7 @@ fun uriToFile(context: Context, uri: Uri): File{
     }
     return file
 }
+
 
 
 //multipart

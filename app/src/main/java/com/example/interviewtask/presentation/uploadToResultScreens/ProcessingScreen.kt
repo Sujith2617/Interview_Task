@@ -43,7 +43,7 @@ fun ProcessingScreen(navController: NavController,viewmodel: UploadViewmodel){
 
             is UploadUiState.Success -> {
                navController.navigate(Screens.Result.passUrl(state.url)){
-                   popUpTo(Screens.ImageSelection.route)
+                   popUpTo(Screens.Home.route)
                }
             }
 

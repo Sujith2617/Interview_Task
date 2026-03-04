@@ -1,14 +1,13 @@
-package com.example.interviewtask.bottomnavigation
+package com.example.interviewtask.bottomnavigation.presentations
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
-
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
@@ -21,15 +20,49 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.interviewtask.bottomnavigation.Screens
 import com.example.interviewtask.data.remote.TemplateItems
+import com.example.interviewtask.presentation.uploadToResultScreens.UploadUiState
 import com.example.interviewtask.viewmodel.TemplateViewModel
+import com.example.interviewtask.viewmodel.UploadViewmodel
+
+@Composable
+fun HomeScreen(viewModel: TemplateViewModel,navController: NavController,viewmodel: UploadViewmodel){
+
+    val uploadState = viewmodel.state
+
+    when(uploadState){
+
+        is UploadUiState.Loading -> {
+            navController.navigate(Screens.Processing.route)
+        }
+        is UploadUiState.Success -> {
+            navController.navigate(Screens.Result.passUrl(uploadState.url))
+        }
+        else -> {
+
+        }
+
+
+    }
+
+    Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("App Title", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        TemplatesCategoryScreen(viewModel,navController)
+    }
+
+}
+
+
 
 @Composable
 fun TemplatesCategoryScreen(viewModel: TemplateViewModel, navController: NavController){
+
     val data = viewModel.templates
     val selectedCategory = viewModel.selectedCategory
 

@@ -6,18 +6,21 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.Exception
 
+
+
+// reading json
 fun loadJsonFromAssets(context: Context) : TemplatesResponse?{
     return try {
 
-        //access/open json file from assets
+        // access to assests then read it as text (converting to string )
         val jsonString = context.assets.open("templates.json")
             .bufferedReader()
             .use { it.readText() }
 
-        // the exact type(map)
+        // the exact type(map) telling gson type we want
         val type = object : TypeToken<TemplatesResponse>() {}.type
 
-        //convert json to kotlin map
+        //convert json to kotlin map bcoz out key are dynamic so we we need to use maping
         Gson().fromJson(jsonString,type)
 
     }

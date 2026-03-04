@@ -1,6 +1,11 @@
 package com.example.interviewtask.viewmodel
 
+import android.content.ContentValues
+import android.content.Context
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,12 +14,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.interviewtask.data.offline.GenratedImageEntity
 import com.example.interviewtask.data.repository.UploadRepository
 import com.example.interviewtask.presentation.uploadToResultScreens.UploadUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 
 class UploadViewmodel (private val repository: UploadRepository): ViewModel(){
@@ -127,4 +136,76 @@ class UploadViewmodel (private val repository: UploadRepository): ViewModel(){
         }
     }
 
+    fun saveImageToGallery(context: Context, imageUrl: String) {
+
+       // state = UploadUiState.Saving   // 👈 show saving state
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val saved = downloadAndSaveImage(context, imageUrl)
+
+            withContext(Dispatchers.Main) {
+                if (saved) {
+
+                    lastImageUrl?.let { insertImage(it) }
+
+                   // state = UploadUiState.Success(imageUrl)  // 👈 back to result
+                    Toast.makeText(context,"Saved to Gallery ", Toast.LENGTH_SHORT).show()
+
+                    Log.d("GALLERY", "Saved successfully")
+
+                } else {
+
+                    state = UploadUiState.Error("Save failed")
+                    Log.d("GALLERY", "Save failed")
+                }
+            }
+        }
+    }
+
+}
+
+fun downloadAndSaveImage(context: Context, imageUrl: String): Boolean {
+    return try {
+
+        val client = OkHttpClient()
+        val request = Request.Builder().url(imageUrl).build()
+        val response = client.newCall(request).execute()
+
+        if (!response.isSuccessful) return false
+
+        val inputStream = response.body?.byteStream() ?: return false
+
+        val fileName = "IMG_${System.currentTimeMillis()}.jpg"
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + "/InterviewTask")
+            put(MediaStore.Images.Media.IS_PENDING, 1)
+        }
+
+        val resolver = context.contentResolver
+
+        val imageUri = resolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        ) ?: return false
+
+        resolver.openOutputStream(imageUri).use { outputStream ->
+            inputStream.copyTo(outputStream!!)
+        }
+
+        contentValues.clear()
+        contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+        resolver.update(imageUri, contentValues, null, null)
+
+        inputStream.close()
+
+        true
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
 }

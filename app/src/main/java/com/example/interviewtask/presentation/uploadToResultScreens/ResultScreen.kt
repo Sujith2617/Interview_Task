@@ -36,11 +36,9 @@ fun ResultScreen (uri: String?,viewmodel: UploadViewmodel){
         Button({
             viewmodel.lastReqId?.let { reqid->
                 viewmodel.lastImageUrl?.let { url ->
-                    viewmodel.insertImage(url)
+                    viewmodel.saveImageToGallery(context,url)
                 }
             }
-
-            Toast.makeText(context,"Saved to collection ", Toast.LENGTH_SHORT).show()
 
         }, modifier = Modifier.padding(top = 10.dp)) {
             Text("Save image")

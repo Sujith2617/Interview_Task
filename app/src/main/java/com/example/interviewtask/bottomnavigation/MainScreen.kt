@@ -11,8 +11,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.interviewtask.bottomnavigation.presentations.CreationsScreen
+import com.example.interviewtask.bottomnavigation.presentations.HomeScreen
 import com.example.interviewtask.presentation.uploadToResultScreens.ImageSelection
-import com.example.interviewtask.presentation.uploadToResultScreens.settingScreens.SettingsScreen
+import com.example.interviewtask.bottomnavigation.presentations.SettingsScreen
 import com.example.interviewtask.viewmodel.TemplateViewModel
 import com.example.interviewtask.viewmodel. UploadViewmodel
 import com.example.interviewtask.presentation.uploadToResultScreens.ProcessingScreen
@@ -36,7 +38,7 @@ fun MainScreen(viewModel: TemplateViewModel,viewmodelUpload: UploadViewmodel){
 
 
             composable(Screens.Home.route) {
-                HomeScreen(viewModel,navController)
+                HomeScreen(viewModel, navController, viewmodelUpload)
             }
             composable(Screens.Creations.route) {
                 CreationsScreen(navController,viewmodelUpload)
